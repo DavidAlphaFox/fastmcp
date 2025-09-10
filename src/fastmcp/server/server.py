@@ -362,7 +362,7 @@ class FastMCP(Generic[LifespanResultT]):
             )
         else:
             raise ValueError(f"Unknown transport: {transport}")
-
+    # 运行服务器
     def run(
         self,
         transport: Transport | None = None,

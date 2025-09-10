@@ -283,7 +283,7 @@ class JWTVerifier(TokenVerifier):
 
         except Exception as e:
             raise ValueError(f"Failed to extract key ID from token: {e}")
-
+    ## 获取JWT Token的Keyset
     async def _get_jwks_key(self, kid: str | None) -> str:
         """Fetch key from JWKS with simple caching."""
         if not self.jwks_uri:
@@ -375,16 +375,16 @@ class JWTVerifier(TokenVerifier):
         """
         try:
             # Get verification key (static or from JWKS)
-            verification_key = await self._get_verification_key(token)
+            verification_key = await self._get_verification_key(token) #得到验证用的Key
 
             # Decode and verify the JWT token
-            claims = self.jwt.decode(token, verification_key)
+            claims = self.jwt.decode(token, verification_key) #对得到的token进行解码和验证
 
             # Extract client ID early for logging
-            client_id = claims.get("client_id") or claims.get("sub") or "unknown"
+            client_id = claims.get("client_id") or claims.get("sub") or "unknown" #获取用户ID
 
             # Validate expiration
-            exp = claims.get("exp")
+            exp = claims.get("exp") #获取过期时间
             if exp and exp < time.time():
                 self.logger.debug(
                     "Token validation failed: expired token for client %s", client_id
@@ -464,7 +464,7 @@ class JWTVerifier(TokenVerifier):
         except Exception as e:
             self.logger.debug("Token validation failed: %s", str(e))
             return None
-
+    #验证token
     async def verify_token(self, token: str) -> AccessToken | None:
         """
         Verify a bearer token and return access info if valid.
